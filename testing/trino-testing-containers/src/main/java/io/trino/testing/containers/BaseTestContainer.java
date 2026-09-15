@@ -115,6 +115,13 @@ public abstract class BaseTestContainer
                 dockerPath);
     }
 
+    protected void copyResourceToContainer(String resourcePath, String dockerPath, int fileMode)
+    {
+        container.withCopyFileToContainer(
+                forHostPath(TestContainers.getPathFromClassPathResource(resourcePath), fileMode),
+                dockerPath);
+    }
+
     protected void mountDirectory(String hostPath, String dockerPath)
     {
         container.addFileSystemBind(hostPath, dockerPath, BindMode.READ_WRITE);

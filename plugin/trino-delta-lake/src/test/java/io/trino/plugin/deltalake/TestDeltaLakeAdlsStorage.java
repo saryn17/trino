@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 public class TestDeltaLakeAdlsStorage
         extends AbstractTestQueryFramework
 {
-    private static final String HADOOP_BASE_IMAGE = System.getenv().getOrDefault("HADOOP_BASE_IMAGE", "ghcr.io/trinodb/testing/hdp3.1-hive");
+    private static final String HADOOP_BASE_IMAGE = System.getenv().getOrDefault("HADOOP_BASE_IMAGE", HiveHadoop.HIVE3_IMAGE);
     private static final List<String> TABLES = ImmutableList.of(NATION.getTableName(), REGION.getTableName(), CUSTOMER.getTableName());
 
     private final String account;
@@ -73,11 +73,12 @@ public class TestDeltaLakeAdlsStorage
     {
         Path hadoopCoreSiteXmlTempFile = createHadoopCoreSiteXmlTempFileWithAbfsSettings();
         hiveHadoop = closeAfterClass(HiveHadoop.builder()
+                .withAzureSupport()
                 .withNetwork(Network.newNetwork())
                 .withImage(HADOOP_BASE_IMAGE)
                 .withFilesToMount(ImmutableMap.of(
                         "/tmp/tpch-tiny", getPathFromClassPathResource("io/trino/plugin/deltalake/testing/resources/databricks73"),
-                        "/etc/hadoop/conf/core-site.xml", hadoopCoreSiteXmlTempFile.toString()))
+                        "/opt/hadoop/etc/hadoop/core-site.xml", hadoopCoreSiteXmlTempFile.toString()))
                 .build());
         hiveHadoop.start();
 

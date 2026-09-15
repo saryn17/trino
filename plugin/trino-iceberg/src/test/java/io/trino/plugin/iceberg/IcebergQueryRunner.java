@@ -696,8 +696,9 @@ public final class IcebergQueryRunner
 
             @SuppressWarnings("resource")
             HiveHadoop hiveHadoop = HiveHadoop.builder()
+                    .withAzureSupport()
                     .withImage(HiveHadoop.HIVE3_IMAGE)
-                    .withFilesToMount(ImmutableMap.of("/etc/hadoop/conf/core-site.xml", hadoopCoreSiteXmlTempFile.normalize().toAbsolutePath().toString()))
+                    .withFilesToMount(ImmutableMap.of("/opt/hadoop/etc/hadoop/core-site.xml", hadoopCoreSiteXmlTempFile.normalize().toAbsolutePath().toString()))
                     .build();
             hiveHadoop.start();
 
